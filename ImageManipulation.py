@@ -82,7 +82,7 @@ def hideData():
 				redBinary = decimalToBinary(r)
 				redList = list(redBinary)
 				#Hard code the array position to be 7 since the size of the decimal value will always be 8
-				If not you can use (redList.length-1)
+				#If not you can use (redList.length-1)
 				redList[7] = binaryDataList[binaryConvertCounter]
 				binaryConvertCounter += 1
 			else:
