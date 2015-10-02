@@ -3,16 +3,6 @@ import os
 import binascii
 from PIL import Image
 
-def asciiToBinary(textData):
-	#binaryData = bin(int(binascii.hexlify(textData), 16))
-	binaryData = ''.join(format(letter,'b').zfill(8) for letter in bytearray(textData))
-	return binaryData
-
-def binaryToAscii(binaryData):
-	tempData = int(binaryData, 2)
-	stringData = binascii.unhexlify('%x' % tempData)
-	return stringData
-
 def decimalToBinary(decimal):
 	binaryValue = bin(decimal)[2:].zfill(8)
 	return binaryValue
