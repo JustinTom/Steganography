@@ -54,8 +54,8 @@ def compareFileSize(coverFile, dataFile):
 	else:
 		return 0
 
-def showData():
-	with open(file, "rb") as f:
+def showData(fileName):
+	with open(fileName, "rb") as f:
 		bytes = bytearray(f.read())
 
 	for bits in bytes:
@@ -81,17 +81,19 @@ def hideData():
 	binaryConvertCounter = 0
 
 	#print binaryDataList
-	#print "Size of binary data list: %d" %binaryDataSize
+	print "Size of binary data list: %d" %binaryDataSize
 
 	#Initial for loop to go through all the pixels in the image and get the original RGB values.
 	for xWidth in range(canvasWidth):
 		for yHeight in range(canvasHeight):
 			r, g, b = rgb_image.getpixel((xWidth, yHeight))
 			
+			#Instantiate the original pixel RGB values in order later reference them if the LSBs are not changed in the RGB value.
 			redDecimal = r
 			greenDecimal = g
 			blueDecimal = b
 
+			#Clear the previous values of the lists - re-instantiate an empty list.
 			redList = []
 			blueList = []
 			greenList = []
@@ -99,11 +101,12 @@ def hideData():
 			rgbDecimalList = []
 			tempList = []
 
+			#Create a list of RGB values in decimal to later iterate through.
 			rgbDecimalList.append(redDecimal)
 			rgbDecimalList.append(greenDecimal)
 			rgbDecimalList.append(blueDecimal)
 
-			#Convert the decimal values of RGB to binary values in a list.
+			#Convert the decimal values of all RGB to binary values in a list.
 			tempList = decimalToBinary(rgbDecimalList[(0)])
 			for num in tempList:
 				redList.append(num)
@@ -122,8 +125,12 @@ def hideData():
 			for i in range(3):
 				#Subtract one from the binaryDataSize because it starts count at 1 not 0
 				#Which the lists we will be using alongside binaryConverCounter and binaryDataSize does.
+				#If the binaryConvertCounter is larger than the size of the binary data, it means it doesn't
+				#divide into 3 evenly, and therefor will have one or two values (green and/or blue) that will not
+				#have their LSB changed, therefore assign them to the original pixel value.
 				if (binaryConvertCounter >= (binaryDataSize-1)):
 					rgb_image.putpixel((xWidth,yHeight), (redDecimal, greenDecimal, blueDecimal))
+					#If the binary data stream does not go into 3 bits (RGB) exactly, then use this to save the photo
 					rgb_image.save("germany.bmp")
 					return
 
@@ -134,7 +141,7 @@ def hideData():
 				#Update 
 				binaryConvertCounter += 1
 
-				#Depending on the number (0-red,1-green,2-blue)
+				#Depending on the number (0-red,1-green,2-blue), change the binary list back to decimal value
 				if (i == 0):
 					redTemp = "".join(rgbList[i])
 					redDecimal = binaryToDecimal(redTemp)
